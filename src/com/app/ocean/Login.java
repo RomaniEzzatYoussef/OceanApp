@@ -54,7 +54,6 @@ public class Login extends HttpServlet
                 }
             }
 
-            System.err.println("lll");
 
         } catch (SQLException | ClassNotFoundException e) {
             e.getStackTrace();

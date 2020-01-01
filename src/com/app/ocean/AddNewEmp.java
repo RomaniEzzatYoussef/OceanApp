@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.*;
+import java.util.ArrayList;
 
 @WebServlet(name = "AddNewEmp")
 public class AddNewEmp extends HttpServlet
@@ -74,6 +75,7 @@ public class AddNewEmp extends HttpServlet
             }
 
             request.setAttribute("message" , emp.getEmp_name() + " has been inserted");
+            request.setAttribute("emps" , getEmps(conn));
             String url = "/emps.jsp";
             getServletContext().getRequestDispatcher(url).forward(request, response);
 
@@ -94,5 +96,39 @@ public class AddNewEmp extends HttpServlet
 
 
     }
+
+    public ArrayList<Emp> getEmps(Connection conn) throws SQLException {
+        Statement s = conn.createStatement();
+        String query = "select * from employees";
+        ResultSet rs =  s.executeQuery(query);
+
+        ArrayList<Emp> emps = new ArrayList<>();
+        while(rs.next())
+        {
+            Emp emp = new Emp();
+
+            emp.setEmp_id(rs.getInt(1));
+            emp.setEmp_name(rs.getString(2));
+            emp.setEmp_image(rs.getString(3));
+            emp.setBase_salary(rs.getDouble(4));
+            emp.setChanging(rs.getDouble(5));
+            emp.setAllowance(rs.getDouble(6));
+            emp.setSalary(rs.getDouble(7));
+            emp.setAdditional(rs.getDouble(8));
+            emp.setCompany_insurance(rs.getDouble(9));
+            emp.setEmp_insurance(rs.getDouble(10));
+            emp.setWork_days(rs.getInt(11));
+            emp.setAdvances(rs.getDouble(12));
+            emp.setSalary_deduction(rs.getDouble(13));
+            emp.setTotal_salary(rs.getDouble(14));
+            emp.setDept_location_id(rs.getInt(15));
+
+            emps.add(emp);
+        }
+
+        return emps;
+    }
+
+
 
 }
