@@ -44,6 +44,7 @@ public class Login extends HttpServlet
                 {
                     request.setAttribute("fullName" , user.getFirst_name() + " " +  user.getLast_name());
                     request.setAttribute("emps" , getEmps(conn));
+                    request.setAttribute("id" , getCurrentEmpID(conn));
                     String url = "/emps.jsp";
                     getServletContext().getRequestDispatcher(url).forward(request, response);
                 } else
@@ -97,6 +98,16 @@ public class Login extends HttpServlet
         return users;
     }
 
+    public int getCurrentEmpID(Connection conn) throws SQLException
+    {
+        Statement statement = conn.createStatement();
+        ResultSet resultSet = statement.executeQuery("select count(emp_id) from employees;");
+        int id = 0;
+        while (resultSet.next())
+            id = resultSet.getInt(1)+1;
+
+        return id;
+    }
 
     public ArrayList<Emp> getEmps(Connection conn) throws SQLException {
         Statement s = conn.createStatement();
